@@ -1,0 +1,112 @@
+{
+  "name": "watttrace",
+  "displayName": "WattTrace",
+  "description": "Green Coding IDE Extension — Analyze energy efficiency of your code using a local Ollama LLM.",
+  "version": "1.0.0",
+  "publisher": "watttrace",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "keywords": [
+    "energy",
+    "green coding",
+    "sustainability",
+    "carbon",
+    "efficiency",
+    "ollama"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "icon": "media/icon.png",
+  "contributes": {
+    "commands": [
+      {
+        "command": "watttrace.analyzeCurrentFile",
+        "title": "WattTrace: Analyze Current File",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "watttrace.toggleHeatmap",
+        "title": "WattTrace: Toggle Energy Heatmap"
+      },
+      {
+        "command": "watttrace.openPanel",
+        "title": "WattTrace: Open WattTrace Panel",
+        "icon": "$(dashboard)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "watttrace-sidebar",
+          "title": "WattTrace",
+          "icon": "$(lightbulb)"
+        }
+      ]
+    },
+    "views": {
+      "watttrace-sidebar": [
+        {
+          "type": "webview",
+          "id": "watttrace.sidebarView",
+          "name": "WattTrace"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "WattTrace",
+      "properties": {
+        "watttrace.ollamaModel": {
+          "type": "string",
+          "default": "llama3.2",
+          "description": "Ollama model name to use for energy analysis."
+        },
+        "watttrace.ollamaEndpoint": {
+          "type": "string",
+          "default": "http://localhost:11434",
+          "description": "Ollama API endpoint URL."
+        },
+        "watttrace.autoAnalyzeOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically analyze the file on save."
+        },
+        "watttrace.enableHeatmap": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable energy heatmap decorations in the editor."
+        },
+        "watttrace.showBadges": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline energy badges near function definitions."
+        }
+      }
+    },
+    "menus": {
+      "editor/title": [
+        {
+          "command": "watttrace.analyzeCurrentFile",
+          "group": "navigation",
+          "when": "editorLangId"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.3"
+  }
+}
