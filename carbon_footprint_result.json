@@ -1,0 +1,79 @@
+{
+  "language": "python",
+  "file_path": null,
+  "total_operations": {
+    "addition": 541,
+    "subtraction": 21,
+    "multiplication": 1000,
+    "division": 20,
+    "assignment": 1564,
+    "comparison": 611,
+    "array_access": 40,
+    "function_call": 1,
+    "memory_allocation": 501,
+    "conditional_branch": 40,
+    "io_operation": 1000
+  },
+  "total_weighted_operations": 59932,
+  "energy_joules": 0.000179796,
+  "energy_kWh": 4.9943333333333336e-11,
+  "carbon_grams_CO2": 2.3723083333333336e-08,
+  "functions": [
+    {
+      "name": "example",
+      "line": 2,
+      "weighted_ops": 59551,
+      "energy_joules": 0.000178653,
+      "carbon_grams_CO2": 2.3572270833333332e-08,
+      "is_recursive": false,
+      "max_loop_nesting": 2,
+      "operations": {
+        "addition": 500,
+        "multiplication": 1000,
+        "assignment": 1501,
+        "comparison": 550,
+        "memory_allocation": 500,
+        "io_operation": 1000
+      }
+    },
+    {
+      "name": "binary_search",
+      "line": 12,
+      "weighted_ops": 381,
+      "energy_joules": 1.143e-06,
+      "carbon_grams_CO2": 1.508125e-10,
+      "is_recursive": false,
+      "max_loop_nesting": 1,
+      "operations": {
+        "addition": 41,
+        "subtraction": 21,
+        "division": 20,
+        "assignment": 63,
+        "comparison": 61,
+        "array_access": 40,
+        "function_call": 1,
+        "memory_allocation": 1,
+        "conditional_branch": 40
+      }
+    }
+  ],
+  "hotspot_functions": [
+    {
+      "name": "example",
+      "weighted_ops": 59551,
+      "percentage": 99.36
+    },
+    {
+      "name": "binary_search",
+      "weighted_ops": 381,
+      "percentage": 0.64
+    }
+  ],
+  "assumptions": [
+    "Energy per operation: 3e-09 J",
+    "Carbon intensity: 475 gCO2/kWh (global average)",
+    "Line 4: for-loop resolved to 50 iterations",
+    "Line 5: for-loop resolved to 10 iterations",
+    "Line 14: while-loop estimated 20 iterations"
+  ]
+}
