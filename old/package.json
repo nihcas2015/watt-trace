@@ -104,6 +104,9 @@
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext ts"
   },
+  "dependencies": {
+    "web-tree-sitter": "^0.22.6"
+  },
   "devDependencies": {
     "@types/node": "^20.11.0",
     "@types/vscode": "^1.85.0",

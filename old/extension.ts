@@ -14,7 +14,7 @@ import {
   applyHeatmap,
   clearDecorations,
   disposeAllDecorations,
-} from './decorations/energyDecorations';
+} from '../src/decorations/energyDecorations';
 import { AnalysisState, EnergyScoreSummary } from './models/energyModels';
 
 let analyzer: Analyzer;
