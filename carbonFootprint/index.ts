@@ -35,8 +35,12 @@ export {
   CARBON_INTENSITY_G_PER_KWH,
   DEFAULT_LOOP_ITERATIONS,
   DEFAULT_RECURSION_DEPTH,
+  ASSUMED_DAILY_USER_EXECUTIONS,
+  ASSUMED_DAILY_SERVER_REQUESTS,
+  SERVER_PUE,
+  DEV_ENVIRONMENT_MULTIPLIER,
 } from './constants';
-export { OperationCount, FunctionAnalysis, AnalysisResult } from './models';
+export { OperationCount, FunctionAnalysis, AnalysisResult, CarbonBreakdown, CategoryFootprint } from './models';
 export { SupportedLanguage, detectLanguage } from './languageDetection';
 export { initializeTreeSitter, isTreeSitterReady, disposeTreeSitter } from './treeSitterManager';
 

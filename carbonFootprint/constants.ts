@@ -75,6 +75,42 @@ export const DEFAULT_LOOP_ITERATIONS = 100;
 export const DEFAULT_RECURSION_DEPTH = 10;
 
 // =============================================================================
+// DEPLOYMENT & TRAFFIC ASSUMPTIONS (for 3-tier carbon breakdown)
+// =============================================================================
+
+/**
+ * The estimator splits the total footprint into three tiers:
+ *   1. User End   — code executing on the end-user's device
+ *   2. Developer End — IDE, build, lint, test cycles during development
+ *   3. Server Side — code executing in a datacenter (with cooling, PUE, traffic)
+ *
+ * Traffic is assumed; all values are daily estimates.
+ */
+
+/** How many times end-users execute this code per day */
+export const ASSUMED_DAILY_USER_EXECUTIONS = 1_000;
+
+/** How many HTTP requests reach the server per day */
+export const ASSUMED_DAILY_SERVER_REQUESTS = 10_000;
+
+/** Power Usage Effectiveness — datacenter overhead for cooling, networking, etc. */
+export const SERVER_PUE = 1.58;
+
+/** Approximate energy for one network request (routing, TLS, DNS) in joules */
+export const NETWORK_ENERGY_PER_REQUEST_J = 0.001;
+
+/** Overhead factor for the user device (OS, display, idle draw, etc.) */
+export const DEVICE_POWER_OVERHEAD = 1.2;
+
+/**
+ * Developer environment multiplier.
+ * Represents the ratio of total development energy to single-execution energy:
+ * IDE rendering, syntax checking, compilation, linting, test-suite runs,
+ * hot-reload, and iterative debugging across many dev-cycles.
+ */
+export const DEV_ENVIRONMENT_MULTIPLIER = 5;
+
+// =============================================================================
 // LANGUAGE-SPECIFIC FUNCTION CLASSIFICATION
 // =============================================================================
 

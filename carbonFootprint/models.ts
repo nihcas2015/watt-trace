@@ -15,6 +15,12 @@ import {
   ENERGY_PER_OPERATION_JOULES,
   JOULES_PER_KWH,
   CARBON_INTENSITY_G_PER_KWH,
+  ASSUMED_DAILY_USER_EXECUTIONS,
+  ASSUMED_DAILY_SERVER_REQUESTS,
+  SERVER_PUE,
+  NETWORK_ENERGY_PER_REQUEST_J,
+  DEVICE_POWER_OVERHEAD,
+  DEV_ENVIRONMENT_MULTIPLIER,
 } from './constants';
 
 // =============================================================================
@@ -125,6 +131,26 @@ export class FunctionAnalysis {
 }
 
 // =============================================================================
+// CARBON BREAKDOWN — 3 tiers (User End / Developer End / Server Side)
+// =============================================================================
+
+/** Footprint for a single deployment tier */
+export interface CategoryFootprint {
+  label: string;
+  description: string;
+  energyJoules: number;
+  carbonGrams: number;
+}
+
+/** Complete breakdown across all three tiers + combined total */
+export interface CarbonBreakdown {
+  userEnd: CategoryFootprint;
+  developerEnd: CategoryFootprint;
+  serverSide: CategoryFootprint;
+  total: CategoryFootprint;
+}
+
+// =============================================================================
 // ANALYSIS RESULT
 // =============================================================================
 
@@ -168,6 +194,56 @@ export class AnalysisResult {
 
   get carbonGrams(): number {
     return this.energyKwh * CARBON_INTENSITY_G_PER_KWH;
+  }
+
+  // ── 3-tier carbon breakdown ──────────────────────────────
+
+  get carbonBreakdown(): CarbonBreakdown {
+    const baseJ = this.energyJoules;
+
+    // 1. User End — code running on user's device × daily executions
+    const userJ = baseJ * DEVICE_POWER_OVERHEAD * ASSUMED_DAILY_USER_EXECUTIONS;
+    const userCO2 = (userJ / JOULES_PER_KWH) * CARBON_INTENSITY_G_PER_KWH;
+
+    // 2. Developer End — IDE, compilation, testing, debugging overhead
+    const devJ = baseJ * DEV_ENVIRONMENT_MULTIPLIER;
+    const devCO2 = (devJ / JOULES_PER_KWH) * CARBON_INTENSITY_G_PER_KWH;
+
+    // 3. Server Side — datacenter PUE + network cost × daily requests
+    const serverComputeJ = baseJ * SERVER_PUE * ASSUMED_DAILY_SERVER_REQUESTS;
+    const networkJ = NETWORK_ENERGY_PER_REQUEST_J * ASSUMED_DAILY_SERVER_REQUESTS;
+    const serverJ = serverComputeJ + networkJ;
+    const serverCO2 = (serverJ / JOULES_PER_KWH) * CARBON_INTENSITY_G_PER_KWH;
+
+    const totalJ = userJ + devJ + serverJ;
+    const totalCO2 = userCO2 + devCO2 + serverCO2;
+
+    return {
+      userEnd: {
+        label: 'User End',
+        description: `${ASSUMED_DAILY_USER_EXECUTIONS.toLocaleString()} daily executions × ${DEVICE_POWER_OVERHEAD}x device overhead`,
+        energyJoules: userJ,
+        carbonGrams: userCO2,
+      },
+      developerEnd: {
+        label: 'Developer End',
+        description: `${DEV_ENVIRONMENT_MULTIPLIER}x dev-environment overhead (IDE, build, test)`,
+        energyJoules: devJ,
+        carbonGrams: devCO2,
+      },
+      serverSide: {
+        label: 'Server Side',
+        description: `${ASSUMED_DAILY_SERVER_REQUESTS.toLocaleString()} daily requests × PUE ${SERVER_PUE}`,
+        energyJoules: serverJ,
+        carbonGrams: serverCO2,
+      },
+      total: {
+        label: 'Total',
+        description: 'Combined daily carbon footprint across all tiers',
+        energyJoules: totalJ,
+        carbonGrams: totalCO2,
+      },
+    };
   }
 
   /** Top 5 functions by weighted operations */
